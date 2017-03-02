@@ -71,5 +71,23 @@
             android:onClick="userReg"/>
     </LinearLayout>
 
+    <Button
+        android:id="@+id/get_json_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GET JSON"
+        android:layout_gravity="center_horizontal"
+        android:onClick="getJson"
+        />
+
+    <Button
+        android:id="@+id/parse_json_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PARSEJSON"
+        android:layout_gravity="center_horizontal"
+        android:onClick="parseJson"
+        />
+
 </LinearLayout>
 

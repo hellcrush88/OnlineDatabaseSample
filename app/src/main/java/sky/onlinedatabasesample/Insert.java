@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import static android.R.attr.country;
 
 public class Insert extends AppCompatActivity {
     EditText e_name, e_password, e_contact, e_email;
