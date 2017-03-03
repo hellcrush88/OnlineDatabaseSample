@@ -25,7 +25,7 @@ import java.net.URL;
 
 public class DisplayListView extends AppCompatActivity {
 
-    String json_string;
+    static String json_string;
     String jsonString;
     JSONObject jsonObject;
     JSONArray jsonArray;
@@ -36,7 +36,6 @@ public class DisplayListView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_refresh_list_view);
-        json_string = getIntent().getExtras().getString("json_data");
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
 
@@ -79,9 +78,6 @@ public class DisplayListView extends AppCompatActivity {
                 }
             }
         });
-
-        jsonParse();
-
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -172,5 +168,11 @@ public class DisplayListView extends AppCompatActivity {
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        new JsonBackgroundTask().execute();
     }
 }

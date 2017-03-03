@@ -2,8 +2,10 @@ package sky.onlinedatabasesample;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 public class Insert extends AppCompatActivity {
@@ -32,4 +34,14 @@ public class Insert extends AppCompatActivity {
         finish();
     }
 
+/*
+    EditText textField = (EditText) findViewById(R.id.webaddressURL);
+    String enteredUrl = textField.getText().toString();
+  if (Patterns.WEB_URL.matcher(enteredUrl).matches()) {
+        Toast.makeText(this, "URL is valid!", Toast.LENGTH_LONG).show();
+    }
+  else {
+        Toast.makeText(this, "URL is invalid!", Toast.LENGTH_LONG).show();
+    }
+    */
 }
