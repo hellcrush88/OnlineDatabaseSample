@@ -16,27 +16,10 @@ import java.util.List;
  * Created by Sky on 02-Mar-17.
  */
 
-public class ContactAdapter extends ArrayAdapter {
+public class ContactAdapter extends ArrayAdapter<Contacts> {
 
-    List list = new ArrayList();
     public ContactAdapter(Context context, int resource) {
         super(context, resource);
-    }
-
-    public void add(Contacts object) {
-        super.add(object);
-        list.add(object);
-    }
-
-    @Override
-    public int getCount() {
-        return list.size();
-    }
-
-
-    @Override
-    public Object getItem(int position) {
-        return list.get(position);
     }
 
     @NonNull

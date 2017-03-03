@@ -14,35 +14,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login"
+        android:text="Database Sample"
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"/>
 
-    <EditText
-        android:id="@+id/user_text"
-        android:layout_marginTop="70dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:hint="User Name"
-        android:singleLine="true"
-        android:maxLines="1"/>
-
-    <EditText
-        android:id="@+id/pass_text"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:hint="Password"
-        android:singleLine="true"
-        android:maxLines="1"
-        android:inputType="textPassword"/>
 
     <LinearLayout
         android:layout_marginTop="32dp"
@@ -57,9 +33,9 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Login"
+            android:text="View Database"
             android:layout_gravity="center_horizontal"
-            android:onClick="userLogin"/>
+            android:onClick="parseJson"/>
 
         <Button
             android:id="@+id/register_btn"
@@ -71,23 +47,6 @@
             android:onClick="userReg"/>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/get_json_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="GET JSON"
-        android:layout_gravity="center_horizontal"
-        android:onClick="getJson"
-        />
-
-    <Button
-        android:id="@+id/parse_json_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="PARSEJSON"
-        android:layout_gravity="center_horizontal"
-        android:onClick="parseJson"
-        />
 
 </LinearLayout>
 

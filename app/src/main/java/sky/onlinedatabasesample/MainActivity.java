@@ -20,19 +20,15 @@ public class MainActivity extends AppCompatActivity {
 
     String jsonString;
     String json_string;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
     }
 
     public void userReg(View view){
         startActivity(new Intent(this, Insert.class));
-    }
-
-    public void getJson(View view){
-        new JsonBackgroundTask().execute();
     }
 
     public void parseJson(View view){
@@ -42,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    class JsonBackgroundTask extends AsyncTask<Void, Void, String>{
+    public class JsonBackgroundTask extends AsyncTask<Void, Void, String>{
 
         String jsonURL = "https://hellcrush.000webhostapp.com/jsongetdata.php";
 
@@ -90,5 +86,11 @@ public class MainActivity extends AppCompatActivity {
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        new JsonBackgroundTask().execute();
     }
 }
