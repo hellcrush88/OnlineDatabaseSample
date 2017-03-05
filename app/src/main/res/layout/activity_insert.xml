@@ -29,35 +29,11 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:layout_marginTop="8dp"
-        android:id="@+id/new_user_email"
+        android:id="@+id/new_url"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email"
-        android:inputType="textPassword"
-        android:singleLine="true"
-        android:maxLines="1"/>
-
-    <EditText
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:layout_marginTop="8dp"
-        android:id="@+id/new_user_contact"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Contact"
-        android:inputType="textPassword"
-        android:singleLine="true"
-        android:maxLines="1"/>
-
-    <EditText
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:layout_marginTop="8dp"
-        android:id="@+id/new_user_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Password"
-        android:inputType="textPassword"
+        android:hint="URL"
+        android:inputType="textUri"
         android:singleLine="true"
         android:maxLines="1"/>
 

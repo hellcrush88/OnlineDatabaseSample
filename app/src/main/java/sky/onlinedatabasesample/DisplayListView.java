@@ -1,8 +1,14 @@
 package sky.onlinedatabasesample;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -31,13 +37,25 @@ public class DisplayListView extends AppCompatActivity {
     JSONArray jsonArray;
     ContactAdapter contactAdapter;
     SwipeRefreshLayout mSwipeRefreshLayout;
+    static NetworkInfo networkInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_refresh_list_view);
 
+        // Get a reference to the ConnectivityManager to check state of network connectivity
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        // Get details on the currently active default data network
+        networkInfo = connectivityManager.getActiveNetworkInfo();
+
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
+
+        if(networkInfo == null){
+            Toast.makeText(this, "There is no internet connection", Toast.LENGTH_LONG).show();
+        }
 
         contactAdapter = new ContactAdapter(this, R.layout.row_layout);
 
@@ -72,9 +90,23 @@ public class DisplayListView extends AppCompatActivity {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (contactAdapter != null) {
-                    contactAdapter.clear();
-                    new JsonBackgroundTask().execute();
+                if(networkInfo != null && networkInfo.isConnected()){
+                    if (contactAdapter != null) {
+                        contactAdapter.clear();
+                        new JsonBackgroundTask().execute();
+                    }
+                }else{
+                    Toast.makeText(DisplayListView.this, "There is no internet connection available",
+                            Toast.LENGTH_SHORT).show();
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Toast.makeText(DisplayListView.this, "Please try again later",
+                            Toast.LENGTH_SHORT).show();
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    return;
                 }
             }
         });
@@ -83,8 +115,52 @@ public class DisplayListView extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Contacts contacts = contactAdapter.getItem(position);
-                String mName = contacts.getName();
-                Toast.makeText(getBaseContext(), mName, Toast.LENGTH_LONG).show();
+                /*String mName = String.valueOf(contacts.getId());
+                Toast.makeText(getBaseContext(), mName, Toast.LENGTH_LONG).show();*/
+                // Convert the String URL into a URI object (to pass into the Intent constructor)
+
+                String url = contacts.getUrl();
+                if (!url.startsWith("http://") && !url.startsWith("https://")){
+                    url = "http://" + url;
+                }
+
+                Uri earthquakeUri = Uri.parse(url);
+
+                // Create a new intent to view the earthquake URI
+                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, earthquakeUri);
+
+                // Send the intent to launch a new activity
+                startActivity(websiteIntent);
+            }
+        });
+
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(DisplayListView.this);
+                builder.setMessage("Delete this item?");
+                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Contacts contacts = contactAdapter.getItem(position);
+                        String method = "delete";
+                        String idNumber = String.valueOf(contacts.getId());
+                        DeleteBackgroundTask deleteBackgroundTask = new DeleteBackgroundTask(DisplayListView.this);
+                        deleteBackgroundTask.execute(method, idNumber);
+                        new JsonBackgroundTask().execute();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User clicked the "Cancel" button, so dismiss the dialog
+                        // and continue editing the pet.
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                builder.show();
+                return true;
             }
         });
     }
@@ -94,31 +170,38 @@ public class DisplayListView extends AppCompatActivity {
     }
 
     public void jsonParse(){
-        String name, email, contact, password;
+        if(networkInfo != null && networkInfo.isConnected()){
+            String name, url;
+            int id;
 
-        try {
-            jsonObject = new JSONObject(json_string);
-            int count = 0;
-            jsonArray = jsonObject.getJSONArray("server_response");
-            while (count < jsonArray.length()) {
-                JSONObject JO = jsonArray.getJSONObject(count);
-                name = JO.getString("name");
-                email = JO.getString("email");
-                contact = JO.getString("contact");
-                password = JO.getString("password");
+            try {
+                jsonObject = new JSONObject(json_string);
+                int count = 0;
+                jsonArray = jsonObject.getJSONArray("server_response");
+                while (count < jsonArray.length()) {
+                    JSONObject JO = jsonArray.getJSONObject(count);
+                    id = JO.getInt("id");
+                    name = JO.getString("name");
+                    url = JO.getString("url");
 
-                Contacts contacts = new Contacts(name, email, contact, password);
-                contactAdapter.addAll(contacts);
-                count++;
+                    Contacts contacts = new Contacts(id, name, url);
+                    contactAdapter.addAll(contacts);
+                    count++;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        }else{
+            return;
         }
+
     }
+
+
 
     public class JsonBackgroundTask extends AsyncTask<Void, Void, String> {
 
-        String jsonURL = "https://hellcrush.000webhostapp.com/jsongetdata.php";
+        String jsonURL = "https://hellcrush.000webhostapp.com/jsongetdata2.php";
 
         public JsonBackgroundTask() {
             super();
@@ -150,6 +233,9 @@ public class DisplayListView extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
+            if(networkInfo == null){
+                return;
+            }
             super.onPreExecute();
         }
 
@@ -173,6 +259,16 @@ public class DisplayListView extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        new JsonBackgroundTask().execute();
+        if(networkInfo != null){
+            new JsonBackgroundTask().execute();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(networkInfo != null){
+            new JsonBackgroundTask().execute();
+        }
     }
 }

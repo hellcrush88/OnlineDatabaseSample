@@ -1,49 +1,45 @@
 package sky.onlinedatabasesample;
 
+import static android.R.attr.password;
+
 /**
  * Created by Sky on 02-Mar-17.
  */
 
 public class Contacts {
 
-    private String name, email, contact, password;
+    private int id;
+    private String name, url;
 
-    public Contacts(String name, String email, String contact, String password){
+    public Contacts(int id, String name, String url){
+        this.setId(id);
         this.setName(name);
-        this.setEmail(email);
-        this.setContact(contact);
-        this.setPassword(password);
+        this.setUrl(url);
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName(){
         return name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUrl() {
+        return url;
     }
 
-    public String getContact() {
-        return contact;
-    }
-
-    public String getPassword() {
-        return password;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
-    public void setContact(String contact) {
-        this.contact = contact;
-    }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

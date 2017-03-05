@@ -35,9 +35,8 @@ public class ContactAdapter extends ArrayAdapter<Contacts> {
             view = inflater.inflate(R.layout.row_layout, parent, false);
             contactHolder = new ContactHolder();
             contactHolder.nameText = (TextView)view.findViewById(R.id.name_text);
-            contactHolder.emailText = (TextView)view.findViewById(R.id.email_text);
-            contactHolder.contactText = (TextView)view.findViewById(R.id.contact_text);
-            contactHolder.passwordText = (TextView)view.findViewById(R.id.pass_text);
+            contactHolder.urlText = (TextView)view.findViewById(R.id.url_text);
+            contactHolder.urlText.setSelected(true);
             view.setTag(contactHolder);
         }else{
             contactHolder = (ContactHolder)view.getTag();
@@ -45,16 +44,14 @@ public class ContactAdapter extends ArrayAdapter<Contacts> {
 
         Contacts contacts = (Contacts)this.getItem(position);
         contactHolder.nameText.setText(contacts.getName());
-        contactHolder.emailText.setText(contacts.getEmail());
-        contactHolder.contactText.setText(contacts.getContact());
-        contactHolder.passwordText.setText(contacts.getPassword());
+        contactHolder.urlText.setText(contacts.getUrl());
 
         return view;
     }
 
     static class ContactHolder{
 
-        TextView nameText, emailText, contactText, passwordText;
+        TextView nameText, urlText;
 
     }
 }
